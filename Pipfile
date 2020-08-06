@@ -18,6 +18,8 @@ flask-bcrypt = "*"
 flask-jwt-extended = "*"
 flask-mail = "*"
 pandas = "*"
+flask-sqlalchemy = "*"
+flask-rest-paginate = "*"
 
 [requires]
 python_version = "3.6"
