@@ -10,19 +10,15 @@ import json
 from resources.errors import (SchemaValidationError, AuthorAlreadyExistsError,
                               InternalServerError, UpdatingAuthorError,
                               DeletingAuthorError, AuthorNotExistsError)
+from resources.pagination import paginate
 
 
 class AuthorsApi(Resource):
     def get(self):
-        page = int(request.args.get('page', 1))
-        per_page = int(request.args.get('per_page', 3))
-        paginator = Pagination(Author.objects, page, per_page)
-
-        # TODO Return [] if page does not exist
-        # TODO Return paginator properties
-        authors_json = [i.to_json() for i in paginator.items]
-
-        return Response(authors_json, mimetype="application/json", status=200)
+        authors = paginate(Author)
+        return Response(json.dumps(authors),
+                        mimetype="application/json",
+                        status=200)
 
     def post(self):
         try:
