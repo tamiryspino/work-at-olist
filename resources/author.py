@@ -10,12 +10,16 @@ import json
 from resources.errors import (SchemaValidationError, AuthorAlreadyExistsError,
                               InternalServerError, UpdatingAuthorError,
                               DeletingAuthorError, AuthorNotExistsError)
-from resources.pagination import paginate
+from resources.pagination import paginate, search
 
 
 class AuthorsApi(Resource):
     def get(self):
-        authors = paginate(Author)
+        search_text = request.args.get('search')
+        if search_text:
+            authors = paginate(search(Author, search_text))
+        else:
+            authors = paginate(Author.objects)
         return Response(json.dumps(authors),
                         mimetype="application/json",
                         status=200)
